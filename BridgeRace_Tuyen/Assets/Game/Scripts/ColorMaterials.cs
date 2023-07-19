@@ -25,22 +25,32 @@ public class ColorMaterials : MonoBehaviour
         int i = 0;
         foreach (Color value in Enum.GetValues(typeof(Color)))
         {
-            Debug.Log(value);
+            //Debug.Log(value);
             materials[i] = Resources.Load<Material>("Materials/" + value);
             if (materials[i] == null)
             {
-                Debug.Log(value + "   fail:" + "Materials/" + value);
+                //Debug.Log(value + "   fail:" + "Materials/" + value);
             }
             ++i;
         }
     }
-    static public bool ChangColor(GameObject gameObject, Material material) {
+    static public void ChangColor(GameObject gameObject, Material material) {
         Renderer renderer = gameObject.GetComponent<Renderer>();
         if(renderer == null)
         {
-            return false;
+            return;
         }
         renderer.material = material;
-        return true;
+        return;
+    }
+    static public void ChangColor(GameObject gameObject, Color color)
+    {
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+        if (renderer == null)
+        {
+            return ;
+        }
+        renderer.material = materials[(int)color];
+        return;
     }
 }

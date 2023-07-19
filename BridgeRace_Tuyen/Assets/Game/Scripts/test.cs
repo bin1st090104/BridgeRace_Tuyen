@@ -15,6 +15,11 @@ public class test : MonoBehaviour
             yield return new WaitForSeconds(2f);
         }
     }
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log(gameObject.name + " OnCollisionEnter " + collision.gameObject.name);
+    }
+
     void Start()
     {
         //StartCoroutine(nameof(ChangeColor));

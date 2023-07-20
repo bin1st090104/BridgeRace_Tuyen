@@ -60,6 +60,7 @@ public class GroundAndBrick : MonoBehaviour
                 brick[pos.first + 5, pos.second + 5].transform.localPosition = new Vector3(pos.first * 2, brick[pos.first + 5, pos.second + 5].transform.localPosition.y, pos.second * 2);
                 int c = nextColor();
                 brick[pos.first + 5, pos.second + 5].GetComponent<Brick>().ChangColor(brickColor[c]);
+                brick[pos.first + 5, pos.second + 5].GetComponent<Brick>().SetOnGround(true);
                 ++countColor[c];
                 brickWithColor[c].Add(brick[pos.first + 5, pos.second + 5].transform);
                 yield return new WaitForSeconds(5f);
@@ -88,6 +89,7 @@ public class GroundAndBrick : MonoBehaviour
                 brick[x + 5, z + 5].transform.localPosition = new Vector3(x * 2, brick[x + 5, z + 5].transform.localPosition.y, z * 2);
                 int c = nextColor();
                 brick[x + 5, z + 5].GetComponent<Brick>().ChangColor(brickColor[c]);
+                brick[x + 5, z + 5].GetComponent<Brick>().SetOnGround(true);
                 ++countColor[c];
                 brickWithColor[c].Add(brick[x + 5, z + 5].transform);
             }

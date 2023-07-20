@@ -6,7 +6,22 @@ public class Brick : MonoBehaviour
 {
     private Color currentColor;
     private IntPair pos;
+    private bool onGround;
 
+    public IEnumerator DropToGround()
+    {
+        while (true)
+        {
+            if (onGround)
+            {
+                yield break;
+            }
+        }
+    }
+    public void SetOnGround(bool status)
+    {
+        onGround = status;
+    }
     public Color GetCurrentColor()
     {
         return currentColor;
@@ -35,8 +50,13 @@ public class Brick : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.transform.parent != null)
+        Debug.Log(name + " trigger enter " + other.name);
+        if (other.name == "Anim" && other.gameObject.transform.parent != null)
         {
+            if (!onGround)
+            {
+                return;
+            }
             GameObject obj = other.gameObject.transform.parent.gameObject;
             if (obj.tag == "Character")
             {
@@ -45,6 +65,7 @@ public class Brick : MonoBehaviour
                 {
                     //Debug.Log("[2]" + gameObject.name + "   " + obj.name);
                     PlayerPicked(gameObject, obj);
+                    onGround = false;
                 }
             }
             else
@@ -53,6 +74,7 @@ public class Brick : MonoBehaviour
                 if (other.gameObject.GetComponent<Anim>().GetColor() == currentColor)
                 {
                     BotPicked(gameObject, obj);
+                    onGround = false;
                 }
             }
         }

@@ -10,7 +10,16 @@ public class Player : MonoBehaviour
 
     //[SerializeField] bool onStair = false;
     //[SerializeField] private GameObject stair;
-    private List<GameObject> brickStack = new List<GameObject>();
+    private List<GameObject> brickStack = new();
+
+    public void DropBrick()
+    {
+
+    }
+    public int brickCount()
+    {
+        return brickStack.Count;
+    }
     private IEnumerator AddGravityForce()
     {
         while (true)
@@ -60,20 +69,11 @@ public class Player : MonoBehaviour
         {
             onStair = true;
         }
-        //Debug.Log(gameObject.name + " OnCollisionEnter " + collision.gameObject.name);
+        Debug.Log(gameObject.name + " OnCollisionEnter " + collision.gameObject.name);
     }
     public void OnCollisionStay(Collision collision)
     {
-        //if (collision.gameObject.name == "Stair")
-        //{
-        //    stair = collision.gameObject;
-        //    onStair = true;
-        //}
-        //if (collision.gameObject.name == "Ground")
-        //{
-        //    onStair = false;
-        //}
-        //Debug.Log(gameObject.name + " OnCollisionStay " + collision.gameObject.name);
+        Debug.Log(gameObject.name + " OnCollisionStay " + collision.gameObject.name);
     }
     public void OnCollisionExit(Collision collision)
     {
@@ -120,37 +120,38 @@ public class Player : MonoBehaviour
             }
             if (isMoving)
             {
-                //Vector3 nextPosition = Vector3.MoveTowards(transform.position, transform.position + direct, speed * Time.deltaTime);
-                //transform.position = nextPosition;
                 transform.LookAt(direct);
-                AddVelocity(direct);
+                Move(direct);
                 transform.eulerAngles = new Vector3(0f, transform.eulerAngles.y, 0f);
             }
         }
-        //transform.position = new Vector3(Mathf.Max(transform.position.x, -0.5f), transform.position.y, transform.position.z);
-        //transform.position = new Vector3(Mathf.Min(transform.position.x, +0.5f), transform.position.y, transform.position.z);
     }
-    private void AddVelocity(Vector3 dir)
+    [SerializeField] private LayerMask layerMask;
+    private void Move(Vector3 dir)
     {
-        if (onStair)
+        Vector3 nextPosition = Vector3.MoveTowards(transform.position, transform.position + direct, speed * Time.deltaTime);
+        RaycastHit hit;
+        Debug.DrawRay(nextPosition, Vector3.down * 10, UnityEngine.Color.green, 10f);
+        if (Physics.Raycast(nextPosition, Vector3.down, out hit, 0.5f, layerMask))
         {
-            Debug.Log(nameof(onStair) + ":" + onStair);
-            float h = dir.magnitude;
-            float cosAlpha = Vector3.Dot(dir, new Vector3(0, 0, dir.z > 0 ? 1 : -1)) / h;
-            float u = h * cosAlpha;
-            //float v = Mathf.Sqrt(h * h - u * u);
-            //rigidbody.velocity = (dir + new Vector3(0, (dir.z > 0 ? u : -u), 0)).normalized * speed;
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir + new Vector3(0, (dir.z > 0 ? u : -u), 0), speed * Time.deltaTime);
-            if (dir.z > 0)
+            Debug.Log("-->>" + hit.point + "   " + hit.distance + "   " + hit.transform.name);
+            Debug.DrawRay(nextPosition, Vector3.down * 3, UnityEngine.Color.yellow, 10f);
+            if (onStair)
             {
-                //rigidbody.AddForce(Vector3.up * 9.81f);
+                nextPosition += hit.point + new Vector3(0f, 1.25f, 0f);
+            }
+            else
+            {
+                nextPosition += hit.point + new Vector3(0f, 1f, 0f);
             }
         }
         else
         {
-            //rigidbody.velocity = dir.normalized * speed + new Vector3(0, rigidbody.velocity.y, 0);
-            transform.position = Vector3.MoveTowards(transform.position, transform.position + dir, speed * Time.deltaTime);
+            Debug.Log("  not hit");
+            Debug.DrawRay(nextPosition, Vector3.down * 10, UnityEngine.Color.red, 5f);
         }
+        //Debug.DrawRay(new Vector3(0, 0, 0), Vector3.up * 10, UnityEngine.Color.red, Mathf.Infinity);
+        transform.position = nextPosition;
     }
     private void FixedUpdate()
     {

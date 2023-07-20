@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 31412102}
   - component: {fileID: 31412101}
   - component: {fileID: 31412100}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -395,7 +395,7 @@ GameObject:
   - component: {fileID: 156550538}
   - component: {fileID: 156550537}
   - component: {fileID: 156550536}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -492,7 +492,7 @@ GameObject:
   - component: {fileID: 176191838}
   - component: {fileID: 176191837}
   - component: {fileID: 176191836}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -777,6 +777,9 @@ MonoBehaviour:
   character: {fileID: 1373252635}
   speed: 5
   rigidbody: {fileID: 306152023}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
 --- !u!4 &306152025
 Transform:
   m_ObjectHideFlags: 0
@@ -1075,7 +1078,7 @@ GameObject:
   - component: {fileID: 663988414}
   - component: {fileID: 663988413}
   - component: {fileID: 663988412}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1615,7 +1618,7 @@ GameObject:
   - component: {fileID: 840174183}
   - component: {fileID: 840174182}
   - component: {fileID: 840174181}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1712,7 +1715,7 @@ GameObject:
   - component: {fileID: 886759093}
   - component: {fileID: 886759092}
   - component: {fileID: 886759091}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1790,7 +1793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 886759090}
   m_LocalRotation: {x: 0.38268343, y: -0, z: -0, w: 0.92387956}
-  m_LocalPosition: {x: 0, y: 4.6464467, z: 20.353554}
+  m_LocalPosition: {x: 10, y: 4.6464467, z: 20.353554}
   m_LocalScale: {x: 1, y: 14.142138, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2850,7 +2853,7 @@ GameObject:
   - component: {fileID: 1693043040}
   - component: {fileID: 1693043039}
   - component: {fileID: 1693043038}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3008,7 +3011,7 @@ GameObject:
   - component: {fileID: 1774740282}
   - component: {fileID: 1774740281}
   - component: {fileID: 1774740280}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3110,7 +3113,7 @@ GameObject:
   - component: {fileID: 1913403509}
   - component: {fileID: 1913403508}
   - component: {fileID: 1913403507}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3372,7 +3375,7 @@ GameObject:
   - component: {fileID: 2080256102}
   - component: {fileID: 2080256101}
   - component: {fileID: 2080256100}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Stair
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3751,6 +3754,10 @@ PrefabInstance:
     - target: {fileID: 3892441039690575103, guid: 15f5462cb9c884440bcfc49aec095381, type: 3}
       propertyPath: m_Name
       value: GroundWithBarrier
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660915026716506016, guid: 15f5462cb9c884440bcfc49aec095381, type: 3}
+      propertyPath: m_IsTrigger
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4746755348797954422, guid: 15f5462cb9c884440bcfc49aec095381, type: 3}
       propertyPath: m_StaticEditorFlags

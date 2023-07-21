@@ -6,35 +6,45 @@ using UnityEngine.AI;
 public class FindState : IState
 {
     // Start is called before the first frame update
-    private GroundAndBrick currentGround;
-    private bool isDestination = false;
+    private GroundAndBrick currentGroundAndBrick;
+    private bool hasDestination = false;
+    private int lim;
     public void OnEnter(Bot bot)
     {
-        RaycastHit hit;
-        if(Physics.Raycast(bot.transform.position, Vector3.down, out hit, 1f))
+        currentGroundAndBrick = bot.GetCurrentGroundAndBrick().GetComponent<GroundAndBrick>();
+        if(currentGroundAndBrick == null)
         {
-            currentGround = hit.collider.gameObject.GetComponent<GroundAndBrick>();
-            if(currentGround == null)
+            Debug.Log("fail enter");
+        }
+        else{
+            Debug.Log("succes enter");
+        }
+        lim = Random.Range(3, 7);
+    }
+    public IState OnExcute(Bot bot)
+    {
+        NavMeshAgent botAgent = bot.gameObject.GetComponent<NavMeshAgent>();
+        if (hasDestination)
+        {
+            if (botAgent.remainingDistance < 1e-3)
             {
-                Debug.Log("Cannot get ground");
+                hasDestination = false;
+                if (bot.brickCount() >= lim)
+                {
+                    return new GoUpState();
+                }
             }
         }
         else
         {
-            Debug.Log("Not hit");
+            Transform nextDestination = currentGroundAndBrick.GetAnObtainedBrick(bot.GetColor());
+            if(nextDestination != null)
+            {
+                hasDestination = true;
+                botAgent.destination = nextDestination.position;
+            }
         }
-    }
-    public void OnExcute(Bot bot)
-    {
-        NavMeshAgent botAgent = bot.gameObject.GetComponent<NavMeshAgent>();
-        if (isDestination)
-        {
-
-        }
-        else
-        {
-
-        }
+        return this;
     }
     public void OnExit(Bot bot)
     {

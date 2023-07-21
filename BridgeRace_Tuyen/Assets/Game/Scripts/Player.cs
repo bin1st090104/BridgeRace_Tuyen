@@ -11,10 +11,16 @@ public class Player : MonoBehaviour
     //[SerializeField] bool onStair = false;
     //[SerializeField] private GameObject stair;
     private List<GameObject> brickStack = new();
+    private int floor;
+    private GameObject currentGroundAndBrick;
 
     public void DropBrick()
     {
-
+        for(int i = 0; i < brickStack.Count; ++i)
+        {
+            StartCoroutine(brickStack[i].GetComponent<Brick>().DropToGround(currentGroundAndBrick));
+        }
+        brickStack.Clear();
     }
     public int brickCount()
     {
@@ -48,48 +54,52 @@ public class Player : MonoBehaviour
         brick.transform.SetParent(transform);
         brick.transform.localPosition = new Vector3(0f, 1 + brickStack.Count * 0.5f, -0.5f);
         brick.transform.localRotation = Quaternion.Euler(Vector3.zero);
-        //Debug.Log(brick.transform.localRotation + "   " + brick.transform.localRotation);
         brickStack.Add(brick);
     }
     private void OnTriggerEnter(Collider other)
     {
-        //Debug.Log("--->" + other.name);
+ 
     }
-    private bool onStair = false;
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Door")
+        {
+            Debug.Log("trigger exit " + other.tag);
+        }
+        if (other.tag == "Door")
+        {
+            //GetComponentInChildren<Anim>().SetLayer("Default");
+            other.isTrigger = false;
+        }
+    }
+
     public void OnCollisionEnter(Collision collision)
     {
         if(collision.gameObject.tag == "Door")
         {
-            if(brickStack.Count > 0)
+            Debug.Log(name + " col enter Door " + floor + "<=>" + collision.gameObject.GetComponent<Door>().floor);
+            if(floor < collision.gameObject.GetComponent<Door>().floor)
             {
-                collision.gameObject.GetComponent<BoxCollider>().isTrigger = true;
+                //GetComponentInChildren<Anim>().SetLayer("CanThroughDoor");
+                collision.gameObject.GetComponent<Collider>().isTrigger = true;
             }
         }
-        if(collision.gameObject.name == "Stair")
-        {
-            onStair = true;
-        }
-        Debug.Log(gameObject.name + " OnCollisionEnter " + collision.gameObject.name);
     }
-    public void OnCollisionStay(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
-        Debug.Log(gameObject.name + " OnCollisionStay " + collision.gameObject.name);
+        //Debug.Log("Col Stay " + collision.gameObject.name);
     }
     public void OnCollisionExit(Collision collision)
     {
-        if (collision.gameObject.tag == "Door")
-        {
-            bool trigger = collision.gameObject.GetComponent<BoxCollider>().isTrigger;
-            trigger = trigger ? true : false;
-        }
-        if(collision.gameObject.name == "Stair")
-        {
-            onStair = false;
-        }
+        //Debug.Log("col exit " + collision.gameObject.tag);
+        //if (collision.gameObject.tag == "Door" && GetComponentInChildren<Anim>().GetLayer() == "CanThroughDoor")
+        //{
+        //    GetComponentInChildren<Anim>().SetLayer("Default");
+        //}
     }
     void Start()
     {
-        //StartCoroutine(AddGravityForce());
     }
 
     // Update is called once per frame
@@ -131,26 +141,26 @@ public class Player : MonoBehaviour
     {
         Vector3 nextPosition = Vector3.MoveTowards(transform.position, transform.position + direct, speed * Time.deltaTime);
         RaycastHit hit;
-        Debug.DrawRay(nextPosition, Vector3.down * 10, UnityEngine.Color.green, 10f);
-        if (Physics.Raycast(nextPosition, Vector3.down, out hit, 0.5f, layerMask))
+        //Debug.DrawRay(nextPosition + Vector3.up, Vector3.down * 2, UnityEngine.Color.yellow, 5f);
+        if(Physics.Raycast(nextPosition + Vector3.up, Vector3.down, out hit, 2f, layerMask))
         {
-            Debug.Log("-->>" + hit.point + "   " + hit.distance + "   " + hit.transform.name);
-            Debug.DrawRay(nextPosition, Vector3.down * 3, UnityEngine.Color.yellow, 10f);
-            if (onStair)
+            if (hit.transform.name == "Ground")
             {
-                nextPosition += hit.point + new Vector3(0f, 1.25f, 0f);
+                floor = hit.transform.gameObject.GetComponent<Ground>().floor;
+                currentGroundAndBrick = hit.transform.parent.gameObject;
             }
             else
+            if (hit.transform.name == "Stair")
             {
-                nextPosition += hit.point + new Vector3(0f, 1f, 0f);
+                //Debug.Log("hit Stair");
+                nextPosition = hit.point + new Vector3(0f, 0.25f, 0f);
             }
+            //Debug.Log("hit ");
         }
         else
         {
-            Debug.Log("  not hit");
-            Debug.DrawRay(nextPosition, Vector3.down * 10, UnityEngine.Color.red, 5f);
+            //Debug.Log("not hit");
         }
-        //Debug.DrawRay(new Vector3(0, 0, 0), Vector3.up * 10, UnityEngine.Color.red, Mathf.Infinity);
         transform.position = nextPosition;
     }
     private void FixedUpdate()

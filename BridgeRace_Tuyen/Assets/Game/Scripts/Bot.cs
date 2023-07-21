@@ -5,7 +5,45 @@ using UnityEngine;
 public class Bot : MonoBehaviour
 {
     private List<GameObject> brickStack = new List<GameObject>();
+    [SerializeField] private LayerMask layerMask;
+    private GameObject currentGroundAndBrick;
 
+    public bool CanGetBrick()
+    {
+        if (brickStack.Count == 0)
+        {
+            return false;
+        }
+        GameObject brick = brickStack[brickStack.Count - 1];
+        brickStack.RemoveAt(brickStack.Count - 1);
+        Destroy(brick);
+        return true;
+    }
+    public GameObject GetCurrentGroundAndBrick()
+    {
+        if(currentGroundAndBrick != null)
+        {
+            return currentGroundAndBrick;
+        }
+        RaycastHit hit;
+        if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2, layerMask))
+        {
+            return currentGroundAndBrick = hit.transform.parent.gameObject;
+        }
+        return null;
+    }
+    public void DropBrick()
+    {
+        for (int i = 0; i < brickStack.Count; ++i)
+        {
+            StartCoroutine(brickStack[i].GetComponent<Brick>().DropToGround(GetCurrentGroundAndBrick()));
+        }
+        brickStack.Clear();
+    }
+    public Color GetColor()
+    {
+        return GetComponentInChildren<Anim>().GetColor();
+    }
     public int brickCount()
     {
         return brickStack.Count;
@@ -20,23 +58,6 @@ public class Bot : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.transform.parent != null)
-        {
-            GameObject obj = other.gameObject.transform.parent.gameObject;
-            if(obj.tag == "Character")
-            {
-                Player player = obj.GetComponent<Player>();
-                if(brickCount() > player.brickCount())
-                {
-
-                }
-            }
-            else
-            if(obj.tag == "Bot")
-            {
-
-            }
-        }
     }
     // Start is called before the first frame update
     void Start()

@@ -29,11 +29,49 @@ public class GroundAndBrick : MonoBehaviour
     private int[] countColor = new int[5];
     private Queue<IntPair> positionNotHaveBrick;
     private List<Transform>[] brickWithColor;
+    private List<Transform> dropBrick;
+
+    public void AddDropBrick(GameObject brick)
+    {
+        dropBrick.Add(brick.transform);
+    }
+    public Transform GetAnObtainedBrick(Color c)
+    {
+        int type = -1;
+        if(dropBrick.Count > 0 && brickWithColor[orderOfColor[c]].Count > 0)
+        {
+            type = Random.Range(0, 1);
+        } 
+        else
+        if(dropBrick.Count > 0)
+        {
+            type = 0;
+        }
+        else
+        if(brickWithColor[orderOfColor[c]].Count > 0)
+        {
+            type = 1;
+        }
+        if(type == 0)
+        {
+            return dropBrick[Random.Range(0, dropBrick.Count - 1)];
+        }
+        if(type == 1)
+        {
+            return brickWithColor[orderOfColor[c]][Random.Range(0, brickWithColor[orderOfColor[c]].Count - 1)];
+        }
+        return null;
+    }
+    public void PickDropBrick(GameObject brick)
+    {
+        dropBrick.Remove(brick.transform);
+    }
     public void PickBrick(IntPair pos)
     {
         GameObject pickedBrick = brick[pos.first + 5, pos.second + 5];
         positionNotHaveBrick.Enqueue(pos);
         Color currentColor = pickedBrick.GetComponent<Brick>().GetCurrentColor();
+
         --countColor[orderOfColor[currentColor]];
         brickWithColor[orderOfColor[currentColor]].Remove(pickedBrick.transform);
         //Destroy(pickedBrick);
@@ -75,6 +113,7 @@ public class GroundAndBrick : MonoBehaviour
         {
             brickWithColor[i] = new List<Transform>();
         }
+        dropBrick = new();
     }
     void Start()
     {

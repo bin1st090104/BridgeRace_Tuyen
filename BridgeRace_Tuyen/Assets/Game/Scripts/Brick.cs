@@ -7,15 +7,30 @@ public class Brick : MonoBehaviour
     private Color currentColor;
     private IntPair pos;
     private bool onGround;
+    [SerializeField] float speedDrop;
 
-    public IEnumerator DropToGround()
+    public IEnumerator DropToGround(GameObject groundAndBrick)
     {
+        if(groundAndBrick == null)
+        {
+            Debug.Log("Aborted fail!!!");
+            yield break;
+        }
+        ChangColor(Color.Grey);
+        transform.SetParent(groundAndBrick.transform);
+        Vector3 target = new Vector3(Random.Range(transform.localPosition.x - 3, transform.localPosition.x + 3)
+                                    ,0.75f
+                                    ,Random.Range(transform.localPosition.z - 3, transform.localPosition.z + 3));
         while (true)
         {
-            if (onGround)
+            if (Vector3.Distance(transform.localPosition, target) < 1e-3)
             {
+                onGround = true;
+                groundAndBrick.GetComponent<GroundAndBrick>().AddDropBrick(gameObject);
                 yield break;
             }
+            transform.localPosition = Vector3.MoveTowards(transform.localPosition, target, speedDrop * Time.deltaTime);
+            yield return null;
         }
     }
     public void SetOnGround(bool status)
@@ -38,19 +53,35 @@ public class Brick : MonoBehaviour
 
     private void PlayerPicked(GameObject brick, GameObject player)
     {
-        transform.parent.gameObject.GetComponent<GroundAndBrick>().PickBrick(pos);
+        if (currentColor == Color.Grey)
+        {
+            transform.GetComponentInParent<GroundAndBrick>().PickDropBrick(brick);
+            brick.GetComponent<Brick>().ChangColor(player.GetComponent<Player>().GetColor());
+        }
+        else
+        {
+            transform.GetComponentInParent<GroundAndBrick>().PickBrick(pos);
+        }
         player.GetComponent<Player>().AddBrick(brick);
     }
 
-    private void BotPicked(GameObject brick, GameObject player)
+    private void BotPicked(GameObject brick, GameObject bot)
     {
-        transform.parent.gameObject.GetComponent<GroundAndBrick>().PickBrick(pos);
-        player.GetComponent<Bot>().AddBrick(brick);
+        if (currentColor == Color.Grey)
+        {
+            transform.GetComponentInParent<GroundAndBrick>().PickDropBrick(brick);
+            brick.GetComponent<Brick>().ChangColor(bot.GetComponent<Bot>().GetColor());
+        }
+        else
+        {
+            transform.GetComponentInParent<GroundAndBrick>().PickBrick(pos);
+        }
+        bot.GetComponent<Bot>().AddBrick(brick);
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log(name + " trigger enter " + other.name);
+        //Debug.Log(name + " trigger enter " + other.name);
         if (other.name == "Anim" && other.gameObject.transform.parent != null)
         {
             if (!onGround)
@@ -60,10 +91,8 @@ public class Brick : MonoBehaviour
             GameObject obj = other.gameObject.transform.parent.gameObject;
             if (obj.tag == "Character")
             {
-                //Debug.Log("[1]" + gameObject.name + "   " + obj.name);
-                if (other.gameObject.GetComponent<Anim>().GetColor() == currentColor)
+                if (currentColor == Color.Grey || other.gameObject.GetComponent<Anim>().GetColor() == currentColor)
                 {
-                    //Debug.Log("[2]" + gameObject.name + "   " + obj.name);
                     PlayerPicked(gameObject, obj);
                     onGround = false;
                 }
@@ -71,7 +100,7 @@ public class Brick : MonoBehaviour
             else
             if(obj.tag == "Bot")
             {
-                if (other.gameObject.GetComponent<Anim>().GetColor() == currentColor)
+                if (currentColor == Color.Grey || other.gameObject.GetComponent<Anim>().GetColor() == currentColor)
                 {
                     BotPicked(gameObject, obj);
                     onGround = false;

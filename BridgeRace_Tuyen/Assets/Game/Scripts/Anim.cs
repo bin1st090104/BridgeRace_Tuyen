@@ -7,6 +7,51 @@ public class Anim : MonoBehaviour
     // Start is called before the first frame update
     private Color myColor;
     static private bool[] usedColor = new bool[5] { false, true, false, false, false};
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.name == "Anim" && other.gameObject.transform.parent != null)
+        {
+            //Debug.Log(GetColor() + "   " + other.GetComponent<Anim>().GetColor());
+            GameObject obj = other.gameObject.transform.parent.gameObject;
+            if (obj.tag == "Character")
+            {
+                Player player = obj.GetComponent<Player>();
+                if (GetComponentInParent<Bot>().brickCount() > player.brickCount())
+                {
+                    player.DropBrick();
+                }
+                else
+                if (GetComponentInParent<Bot>().brickCount() < player.brickCount())
+                {
+                    GetComponentInParent<Bot>().DropBrick();
+                }
+            }
+            else
+            if (obj.tag == "Bot")
+            {
+                Bot bot = obj.GetComponent<Bot>();
+                if (GetComponentInParent<Bot>().brickCount() > bot.brickCount())
+                {
+                    bot.DropBrick();
+                }
+                else
+                if (GetComponentInParent<Bot>().brickCount() < bot.brickCount())
+                {
+                    GetComponentInParent<Bot>().DropBrick();
+                }
+            }
+        }
+    }
+
+    public void SetLayer(string s)
+    {
+        gameObject.layer = LayerMask.NameToLayer(s);
+    }
+    public string GetLayer()
+    {
+        return LayerMask.LayerToName(gameObject.layer);
+    }
     private void PrintBoolArray(bool[] array)
     {
         string result = "";

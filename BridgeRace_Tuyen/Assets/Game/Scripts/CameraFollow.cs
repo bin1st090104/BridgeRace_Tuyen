@@ -12,9 +12,19 @@ public class CameraFollow : MonoBehaviour
         gameObject.transform.rotation = Quaternion.Euler(cameraRotation);
     }
     // Update is called once per frame
+
+    private Player player;
     void Update()
     {
-        GameObject player = MySingleton<Player>.Instance.gameObject;
+        if(player == null)
+        {
+            player = FindObjectOfType<Player>();
+        }
+        if(player == null)
+        {
+            return; 
+        }
         transform.position = player.transform.position + shiftPosition;
+        Debug.Log(player.transform.position + "   " + transform.position);
     }
 }

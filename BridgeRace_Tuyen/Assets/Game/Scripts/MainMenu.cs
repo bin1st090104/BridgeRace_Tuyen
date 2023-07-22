@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class MainMenu : UICanvas
 {
-
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private GameObject mapPrefab;
+    private GameObject curMap;
+    
+    public GameObject CurMap { get { return curMap; } set { curMap = value; } }
+    public void ButtonStart()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-    public void OnStart()
-    {
-
+        curMap = Instantiate(mapPrefab);
+        Close(0);
     }
 }

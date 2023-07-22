@@ -365,6 +365,7 @@
 "Assets/Game/Scripts/Singleton.cs"
 "Assets/Game/Scripts/Stair.cs"
 "Assets/Game/Scripts/test.cs"
+"Assets/Game/Scripts/Victory.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark01_UGUI.cs"
 "Assets/TextMesh Pro/Examples & Extras/Scripts/Benchmark02.cs"

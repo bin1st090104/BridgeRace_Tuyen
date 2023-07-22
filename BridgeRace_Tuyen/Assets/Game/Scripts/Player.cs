@@ -105,6 +105,7 @@ public class Player : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("player: " + transform.position);
         Control();
     }
     private Vector3 firstMousePosition = new Vector3(0f, 0f, 0f);

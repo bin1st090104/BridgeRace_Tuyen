@@ -21,7 +21,8 @@ public class GoUpState : IState
     }
     public void OnExit(Bot bot)
     {
-
+        NavMeshAgent navMeshAgent = bot.GetComponent<NavMeshAgent>();
+        navMeshAgent.destination = bot.transform.position;
     }
 }
 

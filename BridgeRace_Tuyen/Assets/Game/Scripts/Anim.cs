@@ -5,7 +5,7 @@ using UnityEngine;
 public class Anim : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Color myColor;
+    private MyColor myColor;
     static private bool[] usedColor = new bool[5] { false, true, false, false, false};
 
     private void OnTriggerEnter(Collider other)
@@ -63,7 +63,7 @@ public class Anim : MonoBehaviour
         Debug.Log(result);
     }
 
-    public Color GetColor()
+    public MyColor GetColor()
     {
         return myColor;
     }

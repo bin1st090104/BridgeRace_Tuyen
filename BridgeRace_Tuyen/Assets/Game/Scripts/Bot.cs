@@ -21,16 +21,15 @@ public class Bot : MonoBehaviour
     }
     public GameObject GetCurrentGroundAndBrick()
     {
-        if(currentGroundAndBrick != null)
-        {
-            return currentGroundAndBrick;
-        }
         RaycastHit hit;
         if (Physics.Raycast(transform.position + Vector3.up, Vector3.down, out hit, 2, layerMask))
         {
-            return currentGroundAndBrick = hit.transform.parent.gameObject;
+            if (hit.transform.GetComponentInParent<GroundAndBrick>() != null)
+            {
+                return currentGroundAndBrick = hit.transform.parent.gameObject;
+            }
         }
-        return null;
+        return currentGroundAndBrick;
     }
     public void DropBrick()
     {
@@ -40,7 +39,7 @@ public class Bot : MonoBehaviour
         }
         brickStack.Clear();
     }
-    public Color GetColor()
+    public MyColor GetColor()
     {
         return GetComponentInChildren<Anim>().GetColor();
     }

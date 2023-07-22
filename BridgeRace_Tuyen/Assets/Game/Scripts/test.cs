@@ -11,7 +11,7 @@ public class test : MonoBehaviour
         for(int i = 0; i < ColorMaterials.numColor; ++i)
         {
             ColorMaterials.ChangColor(gameObject, ColorMaterials.materials[i]);
-            Debug.Log((Color)i);
+            Debug.Log((MyColor)i);
             yield return new WaitForSeconds(2f);
         }
     }

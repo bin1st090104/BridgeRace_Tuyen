@@ -45,7 +45,7 @@ public class Player : MonoBehaviour
         Destroy(brick);
         return true;
     }
-    public Color GetColor()
+    public MyColor GetColor()
     {
         return GetComponentInChildren<Anim>().GetColor();
     }

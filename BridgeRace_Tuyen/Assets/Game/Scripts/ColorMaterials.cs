@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum Color{
+public enum MyColor{
     Blue,
     Brown,
     Green,
@@ -20,10 +20,10 @@ public class ColorMaterials : MonoBehaviour
     public static int numColor;
     void Awake()
     {
-        numColor = Enum.GetValues(typeof(Color)).Length;
+        numColor = Enum.GetValues(typeof(MyColor)).Length;
         materials = new Material[numColor];
         int i = 0;
-        foreach (Color value in Enum.GetValues(typeof(Color)))
+        foreach (MyColor value in Enum.GetValues(typeof(MyColor)))
         {
             //Debug.Log(value);
             materials[i] = Resources.Load<Material>("Materials/" + value);
@@ -43,7 +43,7 @@ public class ColorMaterials : MonoBehaviour
         renderer.material = material;
         return;
     }
-    static public void ChangColor(GameObject gameObject, Color color)
+    static public void ChangColor(GameObject gameObject, MyColor color)
     {
         Renderer renderer = gameObject.GetComponent<Renderer>();
         if (renderer == null)

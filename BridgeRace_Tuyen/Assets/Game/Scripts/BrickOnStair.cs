@@ -5,7 +5,7 @@ using UnityEngine;
 public class BrickOnStair : MonoBehaviour
 {
     // Start is called before the first frame update
-    private Color curentColor;
+    private MyColor curentColor;
     private bool hasColor = false;
     private bool isTrigger = false;
     [SerializeField] private BoxCollider boxCollider;
@@ -38,9 +38,11 @@ public class BrickOnStair : MonoBehaviour
             GameObject obj = other.transform.parent.gameObject;
             if(obj.name == "Bot")
             {
-                if((!hasColor || curentColor != obj.GetComponent<Bot>().GetColor()) && obj.GetComponent<Bot>().CanGetBrick())
-                {
-                    CurrentColor = obj.GetComponent<Bot>().GetColor();
+                if (!hasColor || curentColor != obj.GetComponent<Bot>().GetColor()) {
+                    if(obj.GetComponent<Bot>().CanGetBrick())
+                    {
+                        CurrentColor = obj.GetComponent<Bot>().GetColor();
+                    }
                 }
             }
         }
@@ -65,7 +67,7 @@ public class BrickOnStair : MonoBehaviour
             }
         }
     }
-    public Color CurrentColor
+    public MyColor CurrentColor
     {
         get
         {
@@ -73,6 +75,7 @@ public class BrickOnStair : MonoBehaviour
         }
         set
         {
+            hasColor = true;
             curentColor = value;
             ColorMaterials.ChangColor(gameObject, value);
         }

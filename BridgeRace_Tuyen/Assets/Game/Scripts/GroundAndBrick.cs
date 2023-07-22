@@ -15,15 +15,15 @@ public struct IntPair
 
 public class GroundAndBrick : MonoBehaviour
 {
-    public static Dictionary<Color, int> orderOfColor = new Dictionary<Color, int>()
+    public static Dictionary<MyColor, int> orderOfColor = new Dictionary<MyColor, int>()
     {
-        [Color.Blue] = 0,
-        [Color.Green] = 1,
-        [Color.Purple] = 2,
-        [Color.Red] = 3,
-        [Color.Yellow] = 4
+        [MyColor.Blue] = 0,
+        [MyColor.Green] = 1,
+        [MyColor.Purple] = 2,
+        [MyColor.Red] = 3,
+        [MyColor.Yellow] = 4
     };
-    public static Color[] brickColor = { Color.Blue, Color.Green, Color.Purple, Color.Red, Color.Yellow };
+    public static MyColor[] brickColor = { MyColor.Blue, MyColor.Green, MyColor.Purple, MyColor.Red, MyColor.Yellow };
     private GameObject[,] brick;
     [SerializeField] GameObject brickPrefab;
     private int[] countColor = new int[5];
@@ -35,7 +35,7 @@ public class GroundAndBrick : MonoBehaviour
     {
         dropBrick.Add(brick.transform);
     }
-    public Transform GetAnObtainedBrick(Color c)
+    public Transform GetAnObtainedBrick(MyColor c)
     {
         int type = -1;
         if(dropBrick.Count > 0 && brickWithColor[orderOfColor[c]].Count > 0)
@@ -70,7 +70,7 @@ public class GroundAndBrick : MonoBehaviour
     {
         GameObject pickedBrick = brick[pos.first + 5, pos.second + 5];
         positionNotHaveBrick.Enqueue(pos);
-        Color currentColor = pickedBrick.GetComponent<Brick>().GetCurrentColor();
+        MyColor currentColor = pickedBrick.GetComponent<Brick>().GetCurrentColor();
 
         --countColor[orderOfColor[currentColor]];
         brickWithColor[orderOfColor[currentColor]].Remove(pickedBrick.transform);
